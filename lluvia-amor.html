@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Lluvia de Amor</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@500&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            overflow: hidden;
+            background: linear-gradient(135deg, #ffeef7, #d6f0ff);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .fondo {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            display: flex; /* Use flexbox for easier centering of heart and message */
+            flex-direction: column; /* Stack heart and message vertically */
+            align-items: center; /* Center horizontally */
+            justify-content: center; /* Center vertically */
+        }
+
+        .lluvia {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .lluvia span {
+            position: absolute;
+            top: -5%;
+            font-size: 1.2rem;
+            color: #e91e63;
+            animation: caer 5s linear infinite;
+            opacity: 0.8;
+            white-space: nowrap;
+        }
+
+        @keyframes caer {
+            0% {
+                transform: translateY(-100px);
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(110vh);
+                opacity: 0;
+            }
+        }
+
+        .corazon-container { /* New container for heart and message */
+            position: relative; /* Essential for positioning child elements relative to it */
+            z-index: 2; /* Ensure it's above the rain */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .corazon-central {
+            font-size: 80px;
+            cursor: pointer;
+            animation: latido 1.5s infinite;
+            color: #e91e63;
+        }
+
+        @keyframes latido {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        .mensaje-instruccion { /* New style for the instruction message */
+            color: #555;
+            font-size: 1rem;
+            margin-top: 10px; /* Space between heart and message */
+            opacity: 1;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .mensaje-instruccion.oculto {
+            opacity: 0; /* Hide when letter is visible */
+        }
+
+        .carta-oculta {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+            text-align: center;
+            opacity: 0;
+            transition: all 0.5s ease-in-out;
+            z-index: 3;
+            max-width: 80%;
+        }
+
+        .carta-oculta.visible {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="fondo">
+        <div class="lluvia"></div>
+
+        <div class="corazon-container"> <div class="corazon-central" id="corazon">&#10084;&#65039;</div>
+            <div class="mensaje-instruccion" id="instruccionMensaje">Presiona el corazón para mostrar el mensaje</div>
+        </div>
+
+        <div class="carta-oculta" id="carta">
+            <h2>¡Para mi persona especial!</h2>
+            <p>Cada latido de mi corazón es un eco de mi amor por ti. Eres la razón de mi sonrisa y la luz de mis días. ¡Te quiero mucho!</p>
+            <p style="margin-top: 15px;">Con todo mi cariño,</p>
+            <p>Tu admirador secreto 😉</p>
+        </div>
+    </div>
+
+    <script>
+        const lluviaContainer = document.querySelector('.lluvia');
+        const mensajes = ['&#10084;&#65039;', 'Amor', '&#x1F496;', 'Beso', '&#x1F49C;', 'Vida', '&#x1F493;'];
+        const corazonCentral = document.getElementById('corazon');
+        const cartaOculta = document.getElementById('carta');
+        const instruccionMensaje = document.getElementById('instruccionMensaje'); // Get the new message element
+
+        function crearMensajeDeLluvia() {
+            const mensaje = document.createElement('span');
+            mensaje.innerHTML = mensajes[Math.floor(Math.random() * mensajes.length)];
+            mensaje.style.left = Math.random() * 100 + 'vw';
+            mensaje.style.animationDuration = Math.random() * 3 + 2 + 's';
+            lluviaContainer.appendChild(mensaje);
+
+            mensaje.addEventListener('animationend', () => {
+                mensaje.remove();
+            });
+        }
+
+        setInterval(crearMensajeDeLluvia, 200);
+
+        corazonCentral.addEventListener('click', () => {
+            cartaOculta.classList.toggle('visible');
+
+            if (cartaOculta.classList.contains('visible')) {
+                corazonCentral.style.animation = 'none';
+                instruccionMensaje.classList.add('oculto'); // Hide the instruction message
+            } else {
+                corazonCentral.style.animation = 'latido 1.5s infinite';
+                instruccionMensaje.classList.remove('oculto'); // Show it again
+            }
+        });
+    </script>
+</body>
+</html>
